@@ -1,6 +1,10 @@
 {
+  "currency": "PHP",
   "last_updated": "April 2026",
-  "labor_per_hour": 650.00,
-  "painting_per_panel": 3500.00,
-  "detailing_rate": 2500.00
+  "rates": {
+    "labor_hr": 650,
+    "paint_panel": 4500,
+    "detailing": 3000,
+    "insurance_vat": 0.12
+  }
 }
