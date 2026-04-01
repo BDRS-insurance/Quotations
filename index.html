@@ -50,7 +50,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1 uppercase">Fair Market Value (₱)</label>
-                        <input type="number" id="m-fmv" value="1000000" class="w-full border-2 border-blue-100 bg-blue-50 p-3 rounded-xl font-bold text-lg text-blue-900" oninput="calculateAll()">
+                        <input type="text" id="m-fmv" value="1,000,000" class="w-full border-2 border-blue-100 bg-blue-50 p-3 rounded-xl font-bold text-lg text-blue-900" oninput="formatInput(this)">
                     </div>
                     
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
@@ -101,7 +101,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1 uppercase">Total Sum Insured (₱)</label>
-                        <input type="number" id="f-tsi" value="5000000" class="w-full border-2 border-orange-100 bg-orange-50 p-3 rounded-xl font-bold text-lg text-orange-900" oninput="calculateAll()">
+                        <input type="text" id="f-tsi" value="5,000,000" class="w-full border-2 border-orange-100 bg-orange-50 p-3 rounded-xl font-bold text-lg text-orange-900" oninput="formatInput(this)">
                     </div>
                     
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
@@ -153,13 +153,11 @@
     <script>
         // TAB SWITCHER
         function showTab(type) {
-            // Hide all
             document.getElementById('motor-tab').classList.remove('active');
             document.getElementById('fire-tab').classList.remove('active');
             document.getElementById('btn-motor').classList.remove('border-blue-400', 'bg-blue-800', 'text-white');
             document.getElementById('btn-fire').classList.remove('border-blue-400', 'bg-blue-800', 'text-white');
             
-            // Show selected
             if(type === 'motor') {
                 document.getElementById('motor-tab').classList.add('active');
                 document.getElementById('btn-motor').classList.add('border-blue-400', 'bg-blue-800', 'text-white');
@@ -170,11 +168,26 @@
             calculateAll();
         }
 
+        // NEW: FORMATTING FUNCTION FOR COMMAS
+        function formatInput(el) {
+            // Remove all non-digits
+            let val = el.value.replace(/,/g, '');
+            if (val === "") {
+                el.value = "";
+                calculateAll();
+                return;
+            }
+            // Add commas and update the field
+            el.value = Number(val).toLocaleString('en-US');
+            calculateAll();
+        }
+
         const format = (n) => "₱" + n.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
         function calculateAll() {
             // MOTOR COMPUTATION
-            const fmv = parseFloat(document.getElementById('m-fmv').value) || 0;
+            // STRIP COMMAS BEFORE CALCULATION
+            const fmv = parseFloat(document.getElementById('m-fmv').value.replace(/,/g, '')) || 0;
             const mOD = document.getElementById('m-od').checked ? fmv * 0.015 : 0;
             const mAON = document.getElementById('m-aon').checked ? fmv * 0.005 : 0;
             const mBI = document.getElementById('m-vtplbi').checked ? 530 : 0;
@@ -199,7 +212,8 @@
             document.getElementById('res-m-total').innerText = format(mTotal);
 
             // FIRE COMPUTATION
-            const tsi = parseFloat(document.getElementById('f-tsi').value) || 0;
+            // STRIP COMMAS BEFORE CALCULATION
+            const tsi = parseFloat(document.getElementById('f-tsi').value.replace(/,/g, '')) || 0;
             const fBase = tsi * parseFloat(document.getElementById('f-base-rate').value);
             const fEQ = document.getElementById('f-eq').checked ? tsi * 0.0015 : 0;
             const fTY = document.getElementById('f-ty').checked ? tsi * 0.0010 : 0;
@@ -224,7 +238,6 @@
             document.getElementById('res-f-total').innerText = format(fTotal);
         }
 
-        // Initial Run
         window.onload = calculateAll;
     </script>
 </body>
