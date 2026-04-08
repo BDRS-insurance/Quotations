@@ -3,206 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDRS-insurance | Professional Quotation</title>
+    <title>BDRS-insurance | Quotations</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
-        /* Logo Selection Styling */
-        .insurer-card { cursor: pointer; border: 2px solid transparent; transition: all 0.3s; opacity: 0.5; filter: grayscale(1); }
-        .insurer-card.selected { border-color: #2563eb; background: #eff6ff; opacity: 1; filter: grayscale(0); transform: translateY(-2px); }
 
         @media print {
             .no-print { display: none !important; }
-            body { background: white !important; }
-            .page-break { page-break-before: always; }
-            .insurer-card:not(.selected) { display: none !important; }
-            .insurer-card.selected { border: none !important; transform: none !important; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { background: white; padding: 0; }
+            .print-container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; }
+            .tab-content.active { display: block !important; }
+            /* FIXED: Ensure comparison logos print if needed */
+            .insurer-card { border: 1px solid #e2e8f0 !important; }
         }
+        
+        /* RESTORED: Original Logo Styling */
+        .insurer-card { cursor: pointer; border: 1px solid #e2e8f0; transition: all 0.2s; }
+        .insurer-card:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .insurer-card.active { border-color: #2563eb; background-color: #dbeafe; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
     </style>
 </head>
-<body class="pb-12 text-slate-900">
+<body class="bg-slate-50 text-slate-900 pb-10">
 
-    <nav class="bg-blue-950 text-white sticky top-0 z-50 no-print shadow-xl">
-        <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">B</div>
-                <span class="font-extrabold text-2xl tracking-tighter uppercase italic">BDRS-insurance</span>
-            </div>
-            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg transition-all">PRINT SELECTED</button>
+    <nav class="bg-blue-900 text-white sticky top-0 z-50 no-print shadow-lg">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <span class="font-black text-xl tracking-tighter uppercase">BDRS-insurance</span>
+            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-xs font-bold transition">PRINT PDF</button>
         </div>
-        <div class="flex max-w-5xl mx-auto px-6 border-t border-blue-900">
-            <button onclick="showTab('motor')" id="btn-motor" class="flex-1 py-4 text-xs font-black tracking-widest border-b-4 border-blue-400 bg-blue-900 text-white uppercase">🚗 Motorcar</button>
-            <button onclick="showTab('fire')" id="btn-fire" class="flex-1 py-4 text-xs font-black tracking-widest border-b-4 border-transparent text-blue-300 hover:text-white uppercase">🏠 Fire / Property</button>
+        <div class="flex max-w-4xl mx-auto border-t border-blue-800">
+            <button onclick="showTab('motor')" id="btn-motor" class="flex-1 py-4 text-sm font-bold border-b-4 border-blue-400 bg-blue-800 text-white">🚗 MOTORCAR</button>
+            <button onclick="showTab('fire')" id="btn-fire" class="flex-1 py-4 text-sm font-bold border-b-4 border-transparent text-blue-300 hover:text-white">🏠 FIRE / PROPERTY</button>
         </div>
     </nav>
 
-    <div class="max-w-5xl mx-auto mt-8 px-6">
-        
-        <div class="hidden print:flex justify-between items-center border-bottom-2 border-blue-900 pb-4 mb-8">
-            <div>
-                <h1 class="text-3xl font-black text-blue-900 italic uppercase">BDRS-insurance</h1>
-                <p id="print-header-details" class="font-bold text-slate-600 uppercase">Motorcar Quotation</p>
+    <div class="max-w-4xl mx-auto mt-6 px-4 print-container">
+
+        <div id="motor-tab" class="tab-content active bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 p-4 border-b text-center">
+                <h2 class="font-black text-lg uppercase">Motorcar Quotation</h2>
+                <p class="text-[10px] font-bold text-slate-500">IC TARIFF - PRIVATE CAR COMPREHENSIVE</p>
             </div>
-            <div class="text-center">
-                <div class="w-12 h-12 bg-slate-200 rounded-full mx-auto mb-1 flex items-center justify-center text-[8px] font-bold">IC LOGO</div>
-                <p class="text-[8px] font-bold text-slate-400">IC AUTHORIZED</p>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4 no-print">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1 uppercase">Vehicle Model</label>
+                        <input type="text" placeholder="e.g. 2025 Toyota Fortuner" class="w-full border-2 p-3 rounded-xl outline-none focus:border-blue-600 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1 uppercase">Fair Market Value (₱)</label>
+                        <input type="text" id="m-fmv" value="1,000,000" class="w-full border-2 border-blue-100 bg-blue-50 p-3 rounded-xl font-bold text-lg text-blue-900" oninput="formatInput(this)">
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-1">Select Perils</p>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="m-od" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600"> Own Damage & Theft (1.50%)</label>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="m-aon" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600"> Acts of Nature (0.50%)</label>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="m-vtplbi" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600"> VTPL - Bodily Injury (₱530)</label>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="m-vtplpd" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600"> VTPL - Property Damage (₱1,050)</label>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="m-pa" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600"> Auto Personal Accident (₱500)</label>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-1">Select Comparison</p>
+                        <div class="grid grid-cols-3 gap-2 text-center text-[9px] font-bold uppercase text-slate-600">
+                            <div class="insurer-card active p-2 rounded-lg" onclick="selectInsurer(this, 'bdrs', 1.0)">BDRS</div>
+                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'pacific', 1.05)">PC (Pacific Cross)</div>
+                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'pioneer', 0.98)">PI (Pioneer)</div>
+                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'asia', 1.04)">AP (Asia Philippines)</div>
+                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'bethel', 1.02)">BG (Bethel)</div>
+                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'paramount', 1.01)">PA (Paramount)</div>
+                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'maagap', 0.96)">MA (Maagap)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <h3 class="text-xs font-black text-slate-400 uppercase mb-4 border-b pb-2">Computation Summary</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between" id="row-m-od"><span>OD/Theft Premium:</span><span id="res-m-od" class="font-bold">₱0.00</span></div>
+                        <div class="flex justify-between" id="row-m-aon"><span>AON Premium:</span><span id="res-m-aon" class="font-bold">₱0.00</span></div>
+                        <div class="flex justify-between text-slate-500" id="row-m-vtplbi"><span>VTPL - Bodily Injury:</span><span id="res-m-vtplbi">₱0.00</span></div>
+                        <div class="flex justify-between text-slate-500" id="row-m-vtplpd"><span>VTPL - Property Damage:</span><span id="res-m-vtplpd">₱0.00</span></div>
+                        <div class="flex justify-between text-slate-500" id="row-m-pa"><span>Auto Personal Accident:</span><span id="res-m-pa">₱0.00</span></div>
+                        
+                        <div class="pt-4 border-t-2 border-slate-200 mt-2 space-y-1 text-xs text-slate-500 font-medium">
+                            <div class="flex justify-between font-bold text-slate-800 text-sm mb-1"><span>Net Premium:</span><span id="res-m-net">₱0.00</span></div>
+                            <div class="flex justify-between"><span>VAT (12%):</span><span id="res-m-vat">₱0.00</span></div>
+                            <div class="flex justify-between"><span>Doc Stamp (12.5%):</span><span id="res-m-dst">₱0.00</span></div>
+                            <div class="flex justify-between"><span>Local Gov Tax (0.2%):</span><span id="res-m-lgt">₱0.00</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-6 bg-blue-900 text-white p-5 rounded-xl text-center shadow-lg">
+                        <p class="text-[10px] font-bold text-blue-300 uppercase mb-1">Total Amount Due</p>
+                        <h2 id="res-m-total" class="text-3xl font-black">₱0.00</h2>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="motor-tab" class="tab-content active">
-            <div class="bg-white rounded-3xl shadow-xl border overflow-hidden mb-8">
-                <div class="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
-                    <div class="space-y-6">
-                        <input type="text" id="m-details" oninput="updatePrintHeader()" placeholder="Unit Details (e.g. 2026 Toyota Hilux)" class="w-full border-2 p-4 rounded-2xl font-bold focus:border-blue-600 outline-none">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-[10px] font-black text-blue-600 uppercase ml-2">Market Value (₱)</label>
-                                <input type="text" id="m-fmv" value="1,000,000" class="w-full border-2 bg-blue-50 border-blue-100 p-4 rounded-2xl font-black text-xl" oninput="formatInput(this)">
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase ml-2">IC Deductible</label>
-                                <div id="m-deductible" class="p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-slate-500">₱5,000.00</div>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 p-6 rounded-2xl space-y-2 no-print">
-                            <label class="flex justify-between font-bold text-sm">Own Damage (1.5%) <input type="checkbox" id="m-od" checked onchange="calculateAll()" class="w-5 h-5"></label>
-                            <label class="flex justify-between font-bold text-sm">Acts of Nature (0.5%) <input type="checkbox" id="m-aon" checked onchange="calculateAll()" class="w-5 h-5"></label>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900 text-white p-8 rounded-3xl">
-                        <p class="text-[10px] font-bold text-blue-400 border-b border-slate-700 pb-2 mb-4 uppercase">Total Net Premium (BDRS)</p>
-                        <h2 id="m-total-display" class="text-4xl font-black mb-4">₱0.00</h2>
-                        <div class="text-xs space-y-2 text-slate-400">
-                            <p class="flex justify-between italic">Net: <span id="m-net-only">₱0.00</span></p>
-                            <p class="flex justify-between italic">Taxes: <span id="m-tax-only">₱0.00</span></p>
-                        </div>
-                    </div>
-                </div>
+        <div id="fire-tab" class="tab-content bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 p-4 border-b text-center">
+                <h2 class="font-black text-lg uppercase">Fire & Property Quotation</h2>
+                <p class="text-[10px] font-bold text-slate-500">IC TARIFF - STANDARD COMMERCIAL/RESIDENTIAL</p>
             </div>
-
-            <div class="no-print mb-8">
-                <h3 class="text-xs font-black text-slate-500 uppercase mb-4 tracking-widest">Select Competitors to Compare & Print</h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    <div onclick="toggleInsurer(this, 'Pacific Cross', 1.05)" class="insurer-card p-4 bg-white rounded-2xl text-center shadow-sm border-2">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-2 flex items-center justify-center font-bold text-blue-600">PC</div>
-                        <p class="text-[10px] font-black uppercase">Pacific Cross</p>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4 no-print">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1 uppercase">Property Name / Location</label>
+                        <input type="text" placeholder="e.g. Warehouse in Binondo" class="w-full border-2 p-3 rounded-xl outline-none focus:border-orange-600 font-semibold">
                     </div>
-                    <div onclick="toggleInsurer(this, 'Pioneer', 0.98)" class="insurer-card p-4 bg-white rounded-2xl text-center shadow-sm border-2">
-                        <div class="w-12 h-12 bg-red-100 rounded-lg mx-auto mb-2 flex items-center justify-center font-bold text-red-600">PI</div>
-                        <p class="text-[10px] font-black uppercase">Pioneer</p>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1 uppercase">Total Sum Insured (₱)</label>
+                        <input type="text" id="f-tsi" value="5,000,000" class="w-full border-2 border-orange-100 bg-orange-50 p-3 rounded-xl font-bold text-lg text-orange-900" oninput="formatInput(this)">
                     </div>
-                    <div onclick="toggleInsurer(this, 'Asia Phil', 1.04)" class="insurer-card p-4 bg-white rounded-2xl text-center shadow-sm border-2">
-                        <div class="w-12 h-12 bg-orange-100 rounded-lg mx-auto mb-2 flex items-center justify-center font-bold text-orange-600">AP</div>
-                        <p class="text-[10px] font-black uppercase">Asia Phil</p>
-                    </div>
-                    <div onclick="toggleInsurer(this, 'Bethel', 1.02)" class="insurer-card p-4 bg-white rounded-2xl text-center shadow-sm border-2">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg mx-auto mb-2 flex items-center justify-center font-bold text-green-600">BG</div>
-                        <p class="text-[10px] font-black uppercase">Bethel</p>
-                    </div>
-                    <div onclick="toggleInsurer(this, 'Paramount', 1.01)" class="insurer-card p-4 bg-white rounded-2xl text-center shadow-sm border-2">
-                        <div class="w-12 h-12 bg-indigo-100 rounded-lg mx-auto mb-2 flex items-center justify-center font-bold text-indigo-600">PA</div>
-                        <p class="text-[10px] font-black uppercase">Paramount</p>
-                    </div>
-                    <div onclick="toggleInsurer(this, 'Maagap', 0.96)" class="insurer-card p-4 bg-white rounded-2xl text-center shadow-sm border-2">
-                        <div class="w-12 h-12 bg-slate-100 rounded-lg mx-auto mb-2 flex items-center justify-center font-bold text-slate-600">MA</div>
-                        <p class="text-[10px] font-black uppercase">Maagap</p>
+                    
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-1">Select Coverages</p>
+                        <div class="pb-2">
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Construction Type</label>
+                            <select id="f-base-rate" class="w-full border p-2 rounded-lg font-bold text-sm" onchange="calculateAll()">
+                                <option value="0.0010">Class A / Concrete (0.10%)</option>
+                                <option value="0.0025">Semi-Concrete (0.25%)</option>
+                                <option value="0.0050">Wood / Light Materials (0.50%)</option>
+                            </select>
+                        </div>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="f-eq" checked onchange="calculateAll()" class="w-5 h-5 accent-orange-600"> Earthquake (0.15%)</label>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="f-ty" checked onchange="calculateAll()" class="w-5 h-5 accent-orange-600"> Typhoon & Flood (0.10%)</label>
+                        <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="f-rsm" checked onchange="calculateAll()" class="w-5 h-5 accent-orange-600"> RSMD (0.01%)</label>
                     </div>
                 </div>
-            </div>
 
-            <div id="print-section" class="bg-white rounded-3xl p-8 shadow-lg border border-slate-200 page-break">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-xl font-bold">IC</div>
-                    <h3 class="text-xl font-black text-slate-800 uppercase tracking-tighter">Comparative Market Analysis</h3>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <h3 class="text-xs font-black text-slate-400 uppercase mb-4 border-b pb-2">Computation Summary</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span>Basic Fire & Lightning:</span><span id="res-f-fire" class="font-bold">₱0.00</span></div>
+                        <div class="flex justify-between" id="row-f-eq"><span>Earthquake Shock:</span><span id="res-f-eq" class="font-bold">₱0.00</span></div>
+                        <div class="flex justify-between" id="row-f-ty"><span>Typhoon & Flood:</span><span id="res-f-ty" class="font-bold">₱0.00</span></div>
+                        <div class="flex justify-between" id="row-f-rsm"><span>RSMD:</span><span id="res-f-rsm" class="font-bold">₱0.00</span></div>
+                        
+                        <div class="pt-4 border-t-2 border-slate-200 mt-2 space-y-1 text-xs text-slate-500 font-medium">
+                            <div class="flex justify-between font-bold text-slate-800 text-sm mb-1"><span>Net Premium:</span><span id="res-f-net">₱0.00</span></div>
+                            <div class="flex justify-between"><span>Fire Service Tax (2%):</span><span id="res-f-fst" class="font-bold text-orange-600">₱0.00</span></div>
+                            <div class="flex justify-between"><span>VAT (12%):</span><span id="res-f-vat">₱0.00</span></div>
+                            <div class="flex justify-between"><span>Doc Stamp (12.5%):</span><span id="res-f-dst">₱0.00</span></div>
+                            <div class="flex justify-between"><span>Local Gov Tax (0.2%):</span><span id="res-f-lgt">₱0.00</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-6 bg-orange-700 text-white p-5 rounded-xl text-center shadow-lg">
+                        <p class="text-[10px] font-bold text-orange-200 uppercase mb-1">Total Amount Due</p>
+                        <h2 id="res-f-total" class="text-3xl font-black">₱0.00</h2>
+                    </div>
                 </div>
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            <th class="p-4 text-[10px] font-black uppercase text-slate-400">Insurance Company</th>
-                            <th class="p-4 text-[10px] font-black uppercase text-slate-400 text-right">Est. Premium</th>
-                            <th class="p-4 text-[10px] font-black uppercase text-slate-400 text-center">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="comparison-rows">
-                        </tbody>
-                </table>
             </div>
         </div>
 
-        <div class="text-center mt-12 text-[10px] text-slate-400 uppercase font-bold">
+        <div class="text-center mt-8 text-[10px] text-slate-400 uppercase print-full">
+            <p>BDRS-insurance Official Quotation Generator</p>
             <p>Indicative only. Subject to final evaluation.</p>
         </div>
     </div>
 
     <script>
-        let selectedInsurers = [];
-
-        function toggleInsurer(el, name, rate) {
-            el.classList.toggle('selected');
-            const index = selectedInsurers.findIndex(i => i.name === name);
-            if (index > -1) {
-                selectedInsurers.splice(index, 1);
+        // TAB SWITCHER
+        function showTab(type) {
+            // Hide all
+            document.getElementById('motor-tab').classList.remove('active');
+            document.getElementById('fire-tab').classList.remove('active');
+            document.getElementById('btn-motor').classList.remove('border-blue-400', 'bg-blue-800', 'text-white');
+            document.getElementById('btn-fire').classList.remove('border-blue-400', 'bg-blue-800', 'text-white');
+            
+            // Show selected
+            if(type === 'motor') {
+                document.getElementById('motor-tab').classList.add('active');
+                document.getElementById('btn-motor').classList.add('border-blue-400', 'bg-blue-800', 'text-white');
             } else {
-                selectedInsurers.push({ name, rate });
+                document.getElementById('fire-tab').classList.add('active');
+                document.getElementById('btn-fire').classList.add('border-blue-400', 'bg-blue-800', 'text-white');
             }
             calculateAll();
         }
 
+        // COMMA FORMATTING
         function formatInput(el) {
-            let val = el.value.replace(/\D/g, '');
-            el.value = val ? Number(val).toLocaleString('en-US') : "";
+            // FIXED: If NaN appears, clear it instantly. Only digits allowed.
+            let val = el.value.replace(/\D/g, ''); 
+            if (val === "" || val === "0") {
+                el.value = ""; 
+                calculateAll();
+                return;
+            }
+            // Add commas as you type
+            el.value = Number(val).toLocaleString('en-US');
             calculateAll();
         }
 
-        const format = (n) => "₱" + n.toLocaleString('en-PH', {minimumFractionDigits: 2});
+        // RESTORED: INSURER SELECTION DYNAMIC LOGIC
+        let currentInsurerRate = 1.0; 
+        function selectInsurer(el, id, rate) {
+            // Deactivate others
+            const cards = document.querySelectorAll('.insurer-card');
+            cards.forEach(card => card.classList.remove('active'));
+            // Activate current
+            el.classList.add('active');
+            currentInsurerRate = rate;
+            calculateAll();
+        }
+
+        const format = (n) => "₱" + n.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
         function calculateAll() {
-            const fmv = parseFloat(document.getElementById('m-fmv').value.replace(/,/g, '')) || 0;
-            const deductible = Math.max(fmv * 0.005, 2000);
-            document.getElementById('m-deductible').innerText = format(deductible);
+            // MOTOR COMPUTATION
+            // STRIP COMMAS BEFORE MATH (Fixed "NaN" logic)
+            const fmvVal = document.getElementById('m-fmv').value.replace(/,/g, '');
+            const fmv = parseFloat(fmvVal) || 0;
+            
+            const mOD = document.getElementById('m-od').checked ? fmv * 0.015 : 0;
+            const mAON = document.getElementById('m-aon').checked ? fmv * 0.005 : 0;
+            const mBI = document.getElementById('m-vtplbi').checked ? 530 : 0;
+            const mPD = document.getElementById('m-vtplpd').checked ? 1050 : 0;
+            const mPA = document.getElementById('m-pa').checked ? 500 : 0;
 
-            const net = (document.getElementById('m-od').checked ? fmv * 0.015 : 0) + 
-                        (document.getElementById('m-aon').checked ? fmv * 0.005 : 0) + 2000;
-            const taxes = net * 0.25;
-            const total = net + taxes;
+            let mNet = mOD + mAON + mBI + mPD + mPA;
+            // APPLY COMPETITOR RATE DYNAMICALLY
+            mNet = mNet * currentInsurerRate;
 
-            document.getElementById('m-total-display').innerText = format(total);
-            document.getElementById('m-net-only').innerText = format(net);
-            document.getElementById('m-tax-only').innerText = format(taxes);
+            const mVat = mNet * 0.12;
+            const mDst = mNet * 0.125;
+            const mLgt = mNet * 0.002;
+            const mTotal = mNet + mVat + mDst + mLgt;
 
-            // Update Table
-            const tbody = document.getElementById('comparison-rows');
-            tbody.innerHTML = `<tr class="bg-blue-50 font-bold border-b">
-                <td class="p-4 text-blue-900">BDRS-insurance (Current)</td>
-                <td class="p-4 text-right text-blue-900">${format(total)}</td>
-                <td class="p-4 text-center text-blue-600">Selected</td>
-            </tr>`;
+            document.getElementById('res-m-od').innerText = format(mOD * currentInsurerRate);
+            document.getElementById('res-m-aon').innerText = format(mAON * currentInsurerRate);
+            document.getElementById('res-m-vtplbi').innerText = format(mBI * currentInsurerRate);
+            document.getElementById('res-m-vtplpd').innerText = format(mPD * currentInsurerRate);
+            document.getElementById('res-m-pa').innerText = format(mPA * currentInsurerRate);
+            document.getElementById('res-m-net').innerText = format(mNet);
+            document.getElementById('res-m-vat').innerText = format(mVat);
+            document.getElementById('res-m-dst').innerText = format(mDst);
+            document.getElementById('res-m-lgt').innerText = format(mLgt);
+            document.getElementById('res-m-total').innerText = format(mTotal);
 
-            selectedInsurers.forEach(ins => {
-                const est = total * ins.rate;
-                tbody.innerHTML += `<tr class="border-b border-slate-100">
-                    <td class="p-4 font-bold text-slate-700">${ins.name}</td>
-                    <td class="p-4 text-right text-slate-600">${format(est)}</td>
-                    <td class="p-4 text-center text-[10px] font-black uppercase text-slate-400">Market Est.</td>
-                </tr>`;
-            });
+            // FIRE COMPUTATION
+            const tsiVal = document.getElementById('f-tsi').value.replace(/,/g, '');
+            const tsi = parseFloat(tsiVal) || 0;
+            const fBase = tsi * parseFloat(document.getElementById('f-base-rate').value);
+            const fEQ = document.getElementById('f-eq').checked ? tsi * 0.0015 : 0;
+            const fTY = document.getElementById('f-ty').checked ? tsi * 0.0010 : 0;
+            const fRSM = document.getElementById('f-rsm').checked ? tsi * 0.0001 : 0;
+
+            const fNet = fBase + fEQ + fTY + fRSM;
+            const fFst = fNet * 0.02;
+            const fVat = fNet * 0.12;
+            const fDst = fNet * 0.125;
+            const fLgt = fNet * 0.002;
+            const fTotal = fNet + fFst + fVat + fDst + fLgt;
+
+            document.getElementById('res-f-fire').innerText = format(fBase);
+            document.getElementById('res-f-eq').innerText = format(fEQ);
+            document.getElementById('res-f-ty').innerText = format(fTY);
+            document.getElementById('res-f-rsm').innerText = format(fRSM);
+            document.getElementById('res-f-net').innerText = format(fNet);
+            document.getElementById('res-f-fst').innerText = format(fFst);
+            document.getElementById('res-f-vat').innerText = format(fVat);
+            document.getElementById('res-f-dst').innerText = format(fDst);
+            document.getElementById('res-f-lgt').innerText = format(fLgt);
+            document.getElementById('res-f-total').innerText = format(fTotal);
         }
 
-        function updatePrintHeader() {
-            const val = document.getElementById('m-details').value;
-            document.getElementById('print-header-details').innerText = val ? val : "Motorcar Quotation";
-        }
-
-        function showTab(type) {
-            // Simplified for this demo
-            alert("Switching to " + type);
-        }
-
+        // Initial Run
         window.onload = calculateAll;
     </script>
 </body>
