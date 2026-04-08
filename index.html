@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nemaraja | Quotations </title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://googleapis.com');
         
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; min-height: 100vh; }
         .tab-content { display: none; }
@@ -102,7 +102,7 @@
                             <div class="flex justify-between"><span class="text-slate-400">OD/Theft Premium</span><span id="res-m-od" class="font-bold">₱0.00</span></div>
                             <div class="flex justify-between"><span class="text-slate-400">AON Premium</span><span id="res-m-aon" class="font-bold">₱0.00</span></div>
                             <div class="flex justify-between border-t border-slate-800 pt-4 mt-4">
-                                <span class="text-slate-400">Taxes & Fees (approx)</span>
+                                <span class="text-slate-400">Taxes & Fees (PH Approx)</span>
                                 <span id="res-m-tax" class="font-bold text-blue-300">₱0.00</span>
                             </div>
                         </div>
@@ -116,9 +116,74 @@
             </div>
         </div>
 
-        <!-- Fire Tab (Placeholder) -->
         <div id="fire-tab" class="tab-content bg-white rounded-3xl p-20 text-center shadow-2xl border border-slate-200">
-            <h2 class="text-2xl font-bold text-slate-400 italic underline decoration-blue-500">Fire/Property Module Coming Soon</h2>
+            <h2 class="text-2xl font-bold text-slate-400 italic">Fire/Property Module Coming Soon</h2>
         </div>
-
     </div>
+
+    <script>
+        // Set Current Date
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-PH', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        // Tab Switching Logic
+        function showTab(type) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`${type}-tab`).classList.add('active');
+            
+            ['motor', 'fire'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if (t === type) {
+                    btn.classList.add('border-blue-400', 'bg-blue-900', 'text-white');
+                    btn.classList.remove('border-transparent', 'text-blue-300');
+                } else {
+                    btn.classList.remove('border-blue-400', 'bg-blue-900', 'text-white');
+                    btn.classList.add('border-transparent', 'text-blue-300');
+                }
+            });
+        }
+
+        // Calculation & Formatting
+        function formatInput(input) {
+            let value = input.value.replace(/,/g, '');
+            if (!isNaN(value) && value !== "") {
+                input.value = parseFloat(value).toLocaleString();
+            }
+            calculateAll();
+        }
+
+        function updatePrintHeader(val) {
+            document.getElementById('print-subject').innerText = val || "Official Quotation";
+        }
+
+        function calculateAll() {
+            const fmvStr = document.getElementById('m-fmv').value.replace(/,/g, '');
+            const fmv = parseFloat(fmvStr) || 0;
+
+            // Rates
+            const od = document.getElementById('m-od').checked ? fmv * 0.015 : 0;
+            const aon = document.getElementById('m-aon').checked ? fmv * 0.005 : 0;
+            const bi = document.getElementById('m-vtplbi').checked ? 350 : 0;
+            const pd = document.getElementById('m-vtplpd').checked ? 450 : 0;
+            const pa = document.getElementById('m-pa').checked ? 250 : 0;
+
+            const deductible = fmv * 0.005;
+            document.getElementById('m-deductible-display').innerText = `₱${deductible.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+
+            const netPremium = od + aon + bi + pd + pa;
+            const taxes = netPremium * 0.254; // Combined PH Tax Estimate
+            const totalDue = netPremium + taxes;
+
+            // Update UI
+            document.getElementById('res-m-od').innerText = `₱${od.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('res-m-aon').innerText = `₱${aon.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('res-m-tax').innerText = `₱${taxes.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('res-m-total').innerText = `₱${totalDue.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        }
+
+        // Initial Run
+        calculateAll();
+    </script>
+</body>
+</html>
