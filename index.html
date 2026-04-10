@@ -70,13 +70,12 @@
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-1">Select Comparison</p>
                         <div class="grid grid-cols-3 gap-2 text-center text-[9px] font-bold uppercase text-slate-600">
-                            <div class="insurer-card active p-2 rounded-lg" onclick="selectInsurer(this, 'bdrs', 1.0)">BDRS</div>
-                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'pacific', 1.05)">PC (Pacific Cross)</div>
-                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'pioneer', 0.98)">PI (Pioneer)</div>
-                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'asia', 1.04)">AP (Asia Philippines)</div>
-                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'bethel', 1.02)">BG (Bethel)</div>
-                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'paramount', 1.01)">PA (Paramount)</div>
-                            <div class="insurer-card p-2 rounded-lg" onclick="selectInsurer(this, 'maagap', 0.96)">MA (Maagap)</div>
+                            <div class="insurer-card active p-2 rounded-lg m-card" onclick="selectInsurer(this, 'motor', 1.0)">BDRS</div>
+                            <div class="insurer-card p-2 rounded-lg m-card" onclick="selectInsurer(this, 'motor', 1.05)">PC (Pacific Cross)</div>
+                            <div class="insurer-card p-2 rounded-lg m-card" onclick="selectInsurer(this, 'motor', 0.98)">PI (Pioneer)</div>
+                            <div class="insurer-card p-2 rounded-lg m-card" onclick="selectInsurer(this, 'motor', 1.04)">AP (Asia Philippines)</div>
+                            <div class="insurer-card p-2 rounded-lg m-card" onclick="selectInsurer(this, 'motor', 1.02)">BG (Bethel)</div>
+                            <div class="insurer-card p-2 rounded-lg m-card" onclick="selectInsurer(this, 'motor', 1.01)">PA (Paramount)</div>
                         </div>
                     </div>
                 </div>
@@ -111,21 +110,40 @@
              <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-4 no-print">
                     <input type="text" placeholder="Property Location" class="w-full border-2 p-3 rounded-xl font-semibold">
-                    <input type="text" id="f-tsi" value="5,000,000" class="w-full border-2 border-orange-100 bg-orange-50 p-3 rounded-xl font-bold text-lg text-orange-900" oninput="formatInput(this)">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1 uppercase">Total Sum Insured (₱)</label>
+                        <input type="text" id="f-tsi" value="5,000,000" class="w-full border-2 border-orange-100 bg-orange-50 p-3 rounded-xl font-bold text-lg text-orange-900" oninput="formatInput(this)">
+                    </div>
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-1">Coverages</p>
                          <select id="f-base-rate" class="w-full border p-2 rounded-lg font-bold text-sm" onchange="calculateAll()">
-                                <option value="0.0010">Class A / Concrete (0.10%)</option>
+                                <option value="0.0010">Class A / Concrete (<span id="lbl-f-base">0.10</span>%)</option>
                                 <option value="0.0025">Semi-Concrete (0.25%)</option>
                                 <option value="0.0050">Wood / Light Materials (0.50%)</option>
                             </select>
                         <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="f-eq" checked onchange="calculateAll()" class="w-5 h-5 accent-orange-600"> Earthquake (0.15%)</label>
                         <label class="flex items-center gap-3 text-sm font-bold cursor-pointer"><input type="checkbox" id="f-ty" checked onchange="calculateAll()" class="w-5 h-5 accent-orange-600"> Typhoon & Flood (0.10%)</label>
                     </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-1">Select Comparison</p>
+                        <div class="grid grid-cols-3 gap-2 text-center text-[9px] font-bold uppercase text-slate-600">
+                            <div class="insurer-card active p-2 rounded-lg f-card" onclick="selectInsurer(this, 'fire', 1.0)">BDRS</div>
+                            <div class="insurer-card p-2 rounded-lg f-card" onclick="selectInsurer(this, 'fire', 1.10)">PC (Pacific Cross)</div>
+                            <div class="insurer-card p-2 rounded-lg f-card" onclick="selectInsurer(this, 'fire', 0.95)">PI (Pioneer)</div>
+                            <div class="insurer-card p-2 rounded-lg f-card" onclick="selectInsurer(this, 'fire', 1.08)">AP (Asia Philippines)</div>
+                            <div class="insurer-card p-2 rounded-lg f-card" onclick="selectInsurer(this, 'fire', 1.03)">BG (Bethel)</div>
+                            <div class="insurer-card p-2 rounded-lg f-card" onclick="selectInsurer(this, 'fire', 1.05)">PA (Paramount)</div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-sm">
-                    <div class="flex justify-between mb-2"><span>Fire Net:</span><span id="res-f-net" class="font-bold">₱0.00</span></div>
-                    <div class="flex justify-between mb-2"><span>Gov't Taxes:</span><span id="res-f-taxes" class="font-bold">₱0.00</span></div>
-                    <div class="mt-4 bg-orange-700 text-white p-5 rounded-xl text-center">
+                    <h3 class="text-xs font-black text-slate-400 uppercase mb-4 border-b pb-2">Computation Summary</h3>
+                    <div class="flex justify-between mb-2"><span>Fire Net Premium:</span><span id="res-f-net" class="font-bold">₱0.00</span></div>
+                    <div class="flex justify-between mb-2"><span>Gov't Taxes (VAT/DST/LGT):</span><span id="res-f-taxes" class="font-bold">₱0.00</span></div>
+                    <div class="mt-4 bg-orange-700 text-white p-5 rounded-xl text-center shadow-lg">
+                        <p class="text-[10px] font-bold text-orange-200 uppercase mb-1">Total Amount Due</p>
                         <h2 id="res-f-total" class="text-3xl font-black">₱0.00</h2>
                     </div>
                 </div>
@@ -138,6 +156,9 @@
     </div>
 
     <script>
+        let motorRate = 1.0;
+        let fireRate = 1.0;
+
         function showTab(type) {
             document.getElementById('motor-tab').classList.toggle('active', type === 'motor');
             document.getElementById('fire-tab').classList.toggle('active', type === 'fire');
@@ -151,45 +172,51 @@
             calculateAll();
         }
 
-        let currentRate = 1.0;
-        function selectInsurer(el, id, rate) {
-            document.querySelectorAll('.insurer-card').forEach(c => c.classList.remove('active'));
+        function selectInsurer(el, type, rate) {
+            // Select only cards in the current section
+            const cardClass = type === 'motor' ? '.m-card' : '.f-card';
+            document.querySelectorAll(cardClass).forEach(c => c.classList.remove('active'));
             el.classList.add('active');
-            currentRate = rate;
-
-            // THIS IS THE ONLY NEW JS: Updates the text percentages based on the selected rate
-            document.getElementById('lbl-od').innerText = (1.50 * rate).toFixed(2);
-            document.getElementById('lbl-aon').innerText = (0.50 * rate).toFixed(2);
-
+            
+            if(type === 'motor') {
+                motorRate = rate;
+                document.getElementById('lbl-od').innerText = (1.50 * rate).toFixed(2);
+                document.getElementById('lbl-aon').innerText = (0.50 * rate).toFixed(2);
+            } else {
+                fireRate = rate;
+                document.getElementById('lbl-f-base').innerText = (0.10 * rate).toFixed(2);
+            }
             calculateAll();
         }
 
         const format = (n) => "₱" + n.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
         function calculateAll() {
-            // MOTOR
+            // MOTOR CALC
             const fmv = parseFloat(document.getElementById('m-fmv').value.replace(/,/g, '')) || 0;
             const mOD = document.getElementById('m-od').checked ? (fmv * 0.015) : 0;
             const mAON = document.getElementById('m-aon').checked ? (fmv * 0.005) : 0;
             const mVTPL = (document.getElementById('m-vtplbi').checked ? 530 : 0) + (document.getElementById('m-vtplpd').checked ? 1050 : 0);
             const mPA = document.getElementById('m-pa').checked ? 500 : 0;
 
-            const net = (mOD + mAON + mVTPL + mPA) * currentRate;
-            const taxes = net * 0.247; 
-            const total = net + taxes;
+            const mNet = (mOD + mAON + mVTPL + mPA) * motorRate;
+            const mTaxes = mNet * 0.247; 
+            const mTotal = mNet + mTaxes;
 
-            document.getElementById('res-m-od').innerText = format(mOD * currentRate);
-            document.getElementById('res-m-aon').innerText = format(mAON * currentRate);
-            document.getElementById('res-m-vtpl').innerText = format(mVTPL * currentRate);
-            document.getElementById('res-m-pa').innerText = format(mPA * currentRate);
-            document.getElementById('res-m-net').innerText = format(net);
-            document.getElementById('res-m-taxes').innerText = format(taxes);
-            document.getElementById('res-m-total').innerText = format(total);
+            document.getElementById('res-m-od').innerText = format(mOD * motorRate);
+            document.getElementById('res-m-aon').innerText = format(mAON * motorRate);
+            document.getElementById('res-m-vtpl').innerText = format(mVTPL * motorRate);
+            document.getElementById('res-m-pa').innerText = format(mPA * motorRate);
+            document.getElementById('res-m-net').innerText = format(mNet);
+            document.getElementById('res-m-taxes').innerText = format(mTaxes);
+            document.getElementById('res-m-total').innerText = format(mTotal);
 
-            // FIRE
+            // FIRE CALC
             const tsi = parseFloat(document.getElementById('f-tsi').value.replace(/,/g, '')) || 0;
-            const fNet = tsi * (parseFloat(document.getElementById('f-base-rate').value) + (document.getElementById('f-eq').checked ? 0.0015 : 0) + (document.getElementById('f-ty').checked ? 0.0010 : 0));
+            const fBaseVal = parseFloat(document.getElementById('f-base-rate').value);
+            const fNet = (tsi * (fBaseVal + (document.getElementById('f-eq').checked ? 0.0015 : 0) + (document.getElementById('f-ty').checked ? 0.0010 : 0))) * fireRate;
             const fTaxes = fNet * 0.267;
+            
             document.getElementById('res-f-net').innerText = format(fNet);
             document.getElementById('res-f-taxes').innerText = format(fTaxes);
             document.getElementById('res-f-total').innerText = format(fNet + fTaxes);
