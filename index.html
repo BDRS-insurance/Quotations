@@ -19,7 +19,6 @@
             .no-print { display: none !important; }
             .print-container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; }
             
-            /* Ensure numbers are visible on white paper */
             .bg-slate-900, .bg-orange-900 { background-color: #f8fafc !important; border: 2px solid #1e3a8a !important; color: #000 !important; }
             .text-white, .text-slate-400, .text-blue-400, .text-orange-400, .text-blue-100 { color: #000 !important; }
             .border-slate-800 { border-color: #e2e8f0 !important; }
@@ -74,23 +73,23 @@
                     <div class="bg-slate-50 p-4 rounded-2xl border space-y-3">
                         <p class="text-[10px] font-black text-blue-600 uppercase border-b pb-1">Select Perils & Tariff Rates</p>
                         <label class="flex justify-between items-center text-sm font-bold cursor-pointer">
-                            <span>Own Damage & Theft (1.50%)</span>
+                            <span>Own Damage & Theft (<span id="rate-od">1.50</span>%)</span>
                             <input type="checkbox" id="m-od" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600">
                         </label>
                         <label class="flex justify-between items-center text-sm font-bold cursor-pointer">
-                            <span>Acts of Nature (0.50%)</span>
+                            <span>Acts of Nature (<span id="rate-aon">0.50</span>%)</span>
                             <input type="checkbox" id="m-aon" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600">
                         </label>
                         <label class="flex justify-between items-center text-sm font-bold cursor-pointer">
-                            <span>VTPL - Bodily Injury (₱530)</span>
+                            <span>VTPL - Bodily Injury (₱<span id="rate-vtplbi">530</span>)</span>
                             <input type="checkbox" id="m-vtplbi" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600">
                         </label>
                         <label class="flex justify-between items-center text-sm font-bold cursor-pointer">
-                            <span>VTPL - Property Damage (₱1,050)</span>
+                            <span>VTPL - Property Damage (₱<span id="rate-vtplpd">1,050</span>)</span>
                             <input type="checkbox" id="m-vtplpd" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600">
                         </label>
                         <label class="flex justify-between items-center text-sm font-bold cursor-pointer">
-                            <span>Auto Personal Accident (₱500)</span>
+                            <span>Auto Personal Accident (₱<span id="rate-pa">500</span>)</span>
                             <input type="checkbox" id="m-pa" checked onchange="calculateAll()" class="w-5 h-5 accent-blue-600">
                         </label>
                     </div>
@@ -116,11 +115,10 @@
                         </div>
                         <h3 class="text-xs font-black text-blue-400 uppercase border-b border-slate-800 pb-4 mb-6 tracking-widest">Computation Summary</h3>
                         <div class="space-y-3 text-sm">
-                            <div class="flex justify-between text-slate-400"><span>OD/Theft (Tariff):</span><span id="res-m-od" class="font-bold text-white">₱0.00</span></div>
-                            <div class="flex justify-between text-slate-400"><span>Acts of Nature (Tariff):</span><span id="res-m-aon" class="font-bold text-white">₱0.00</span></div>
-                            <div class="flex justify-between text-slate-400"><span>Third Party BI/PD:</span><span id="res-m-vtpl" class="font-bold text-white">₱0.00</span></div>
+                            <div class="flex justify-between text-slate-400"><span>OD/Theft Premium:</span><span id="res-m-od" class="font-bold text-white">₱0.00</span></div>
+                            <div class="flex justify-between text-slate-400"><span>Acts of Nature:</span><span id="res-m-aon" class="font-bold text-white">₱0.00</span></div>
+                            <div class="flex justify-between text-slate-400"><span>Third Party (BI/PD):</span><span id="res-m-vtpl" class="font-bold text-white">₱0.00</span></div>
                             <div class="flex justify-between text-slate-400"><span>Personal Accident:</span><span id="res-m-pa" class="font-bold text-white">₱0.00</span></div>
-                            <div class="flex justify-between text-blue-400 italic"><span>Insurer Adjustment:</span><span id="res-m-adj" class="font-bold text-blue-400">₱0.00</span></div>
                             
                             <div class="pt-6 border-t border-slate-800 mt-4 space-y-2">
                                 <div class="flex justify-between font-black text-blue-100"><span>NET PREMIUM:</span><span id="res-m-net">₱0.00</span></div>
@@ -139,7 +137,7 @@
         <div id="fire-tab" class="tab-content bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-4 no-print">
-                    <input type="text" placeholder="Property Location / Description" class="w-full border-2 p-3 rounded-xl font-bold focus:border-orange-600">
+                    <input type="text" placeholder="Property Location / Description" class="w-full border-2 p-3 rounded-xl font-bold outline-none focus:border-orange-600">
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Total Sum Insured (₱)</label>
                         <input type="text" id="f-tsi" value="5,000,000" class="w-full border-2 border-orange-100 bg-orange-50 p-3 rounded-xl font-black text-xl text-orange-900" oninput="formatInput(this)">
@@ -147,16 +145,16 @@
                     <div class="bg-slate-50 p-4 rounded-2xl border space-y-3">
                         <p class="text-[10px] font-black text-orange-600 uppercase border-b pb-1">Property Coverages</p>
                         <select id="f-base" class="w-full border-2 p-3 rounded-xl font-bold text-sm bg-white" onchange="calculateAll()">
-                            <option value="0.0010">Class A Concrete (0.10%)</option>
-                            <option value="0.0025">Semi-Concrete (0.25%)</option>
-                            <option value="0.0050">Wood/Light Materials (0.50%)</option>
+                            <option value="0.0010">Class A Concrete (<span id="f-rate-base">0.10</span>%)</option>
+                            <option value="0.0025">Semi-Concrete (<span id="f-rate-semi">0.25</span>%)</option>
+                            <option value="0.0050">Wood/Light Materials (<span id="f-rate-wood">0.50</span>%)</option>
                         </select>
                         <label class="flex justify-between items-center text-sm font-bold cursor-pointer">
-                            <span>Earthquake (0.15%)</span>
+                            <span>Earthquake (<span id="f-rate-eq">0.15</span>%)</span>
                             <input type="checkbox" id="f-eq" checked onchange="calculateAll()" class="w-5 h-5 accent-orange-600">
                         </label>
                         <label class="flex justify-between items-center text-sm font-bold cursor-pointer">
-                            <span>Typhoon & Flood (0.10%)</span>
+                            <span>Typhoon & Flood (<span id="f-rate-ty">0.10</span>%)</span>
                             <input type="checkbox" id="f-ty" checked onchange="calculateAll()" class="w-5 h-5 accent-orange-600">
                         </label>
                     </div>
@@ -175,12 +173,8 @@
                     <div>
                         <h3 class="text-xs font-black text-orange-400 uppercase border-b border-orange-800 pb-4 mb-6 tracking-widest">Property Summary</h3>
                         <div class="space-y-3 text-sm">
-                            <div class="flex justify-between text-orange-200"><span>Tariff Net:</span><span id="res-f-tariff" class="font-bold text-white">₱0.00</span></div>
-                            <div class="flex justify-between text-orange-400 italic"><span>Insurer Adjustment:</span><span id="res-f-adj" class="font-bold">₱0.00</span></div>
-                            <div class="pt-6 border-t border-orange-800 mt-4 space-y-2">
-                                <div class="flex justify-between font-black text-orange-100"><span>NET PREMIUM:</span><span id="res-f-net">₱0.00</span></div>
-                                <div class="flex justify-between text-xs text-orange-300"><span>Taxes (26.7%):</span><span id="res-f-taxes">₱0.00</span></div>
-                            </div>
+                            <div class="flex justify-between text-orange-200"><span>Fire Net Premium:</span><span id="res-f-net" class="font-bold text-white">₱0.00</span></div>
+                            <div class="flex justify-between text-orange-300"><span>Taxes (26.7%):</span><span id="res-f-taxes" class="font-bold text-white">₱0.00</span></div>
                         </div>
                     </div>
                     <div class="mt-10 pt-6 border-t border-orange-800 text-center">
@@ -224,7 +218,23 @@
             const cardClass = type === 'motor' ? '.m-card' : '.f-card';
             document.querySelectorAll(cardClass).forEach(c => c.classList.remove('active'));
             el.classList.add('active');
-            if(type === 'motor') motorRate = rate; else fireRate = rate;
+            
+            if(type === 'motor') {
+                motorRate = rate;
+                // Update UI rates on the left
+                document.getElementById('rate-od').innerText = (1.50 * rate).toFixed(2);
+                document.getElementById('rate-aon').innerText = (0.50 * rate).toFixed(2);
+                document.getElementById('rate-vtplbi').innerText = Math.round(530 * rate);
+                document.getElementById('rate-vtplpd').innerText = Math.round(1050 * rate);
+                document.getElementById('rate-pa').innerText = Math.round(500 * rate);
+            } else {
+                fireRate = rate;
+                document.getElementById('f-rate-base').innerText = (0.10 * rate).toFixed(2);
+                document.getElementById('f-rate-semi').innerText = (0.25 * rate).toFixed(2);
+                document.getElementById('f-rate-wood').innerText = (0.50 * rate).toFixed(2);
+                document.getElementById('f-rate-eq').innerText = (0.15 * rate).toFixed(2);
+                document.getElementById('f-rate-ty').innerText = (0.10 * rate).toFixed(2);
+            }
             calculateAll();
         }
 
@@ -234,37 +244,33 @@
             document.getElementById('print-m-model').innerText = document.getElementById('m-model').value || "Not Specified";
             const fmv = parseFloat(document.getElementById('m-fmv').value.replace(/,/g, '')) || 0;
             
-            // MOTOR (Tallying Fix)
-            const mOD_base = document.getElementById('m-od').checked ? (fmv * 0.015) : 0;
-            const mAON_base = document.getElementById('m-aon').checked ? (fmv * 0.005) : 0;
-            const mVTPL_base = (document.getElementById('m-vtplbi').checked ? 530 : 0) + (document.getElementById('m-vtplpd').checked ? 1050 : 0);
-            const mPA_base = document.getElementById('m-pa').checked ? 500 : 0;
+            // MOTOR
+            const mOD = document.getElementById('m-od').checked ? (fmv * (parseFloat(document.getElementById('rate-od').innerText)/100)) : 0;
+            const mAON = document.getElementById('m-aon').checked ? (fmv * (parseFloat(document.getElementById('rate-aon').innerText)/100)) : 0;
+            const mVTPL = (document.getElementById('m-vtplbi').checked ? parseFloat(document.getElementById('rate-vtplbi').innerText) : 0) + 
+                          (document.getElementById('m-vtplpd').checked ? parseFloat(document.getElementById('rate-vtplpd').innerText) : 0);
+            const mPA = document.getElementById('m-pa').checked ? parseFloat(document.getElementById('rate-pa').innerText) : 0;
             
-            const mTariffTotal = mOD_base + mAON_base + mVTPL_base + mPA_base;
-            const mAdjustment = (mTariffTotal * motorRate) - mTariffTotal;
-            const mNet = mTariffTotal + mAdjustment;
+            const mNet = mOD + mAON + mVTPL + mPA;
             const mTaxes = mNet * 0.247;
             
-            document.getElementById('res-m-od').innerText = format(mOD_base);
-            document.getElementById('res-m-aon').innerText = format(mAON_base);
-            document.getElementById('res-m-vtpl').innerText = format(mVTPL_base);
-            document.getElementById('res-m-pa').innerText = format(mPA_base);
-            document.getElementById('res-m-adj').innerText = (mAdjustment >= 0 ? "+" : "") + format(mAdjustment);
+            document.getElementById('res-m-od').innerText = format(mOD);
+            document.getElementById('res-m-aon').innerText = format(mAON);
+            document.getElementById('res-m-vtpl').innerText = format(mVTPL);
+            document.getElementById('res-m-pa').innerText = format(mPA);
             document.getElementById('res-m-net').innerText = format(mNet);
             document.getElementById('res-m-taxes').innerText = format(mTaxes);
             document.getElementById('res-m-total').innerText = format(mNet + mTaxes);
 
-            // FIRE (Tallying Fix)
+            // FIRE
             const tsi = parseFloat(document.getElementById('f-tsi').value.replace(/,/g, '')) || 0;
-            const fTariffNet = (tsi * (parseFloat(document.getElementById('f-base').value) + 
-                               (document.getElementById('f-eq').checked ? 0.0015 : 0) + 
-                               (document.getElementById('f-ty').checked ? 0.0010 : 0)));
-            const fAdjustment = (fTariffNet * fireRate) - fTariffNet;
-            const fNet = fTariffNet + fAdjustment;
+            const fBaseRate = (parseFloat(document.getElementById('f-base').value) * fireRate);
+            const fEQ = document.getElementById('f-eq').checked ? (0.0015 * fireRate) : 0;
+            const fTY = document.getElementById('f-ty').checked ? (0.0010 * fireRate) : 0;
+
+            const fNet = tsi * (fBaseRate + fEQ + fTY);
             const fTaxes = fNet * 0.267;
             
-            document.getElementById('res-f-tariff').innerText = format(fTariffNet);
-            document.getElementById('res-f-adj').innerText = (fAdjustment >= 0 ? "+" : "") + format(fAdjustment);
             document.getElementById('res-f-net').innerText = format(fNet);
             document.getElementById('res-f-taxes').innerText = format(fTaxes);
             document.getElementById('res-f-total').innerText = format(fNet + fTaxes);
